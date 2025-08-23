@@ -3,9 +3,46 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
     <title>Library</title>
   </head>
   <body>
+    <h1>Library</h1>
+
+    <table id="bookTable">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Author</th>
+          <th>Pages</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <br />
+
+    <button id="openModal">New Book</button>
+
+    <div id="bookModal" class="modal">
+      <div class="modal-content">
+        <h3>Add New Book</h3>
+        <form id="bookForm">
+          <input type="text" id="title" placeholder="title" required />
+          <input type="text" id="author" placeholder="author" required />
+          <input type="number" id="pages" placeholder="pages" required />
+          <select name="status" id="status" required>
+            <option value="Reading">Reading</option>
+            <option value="Completed">Completed</option>
+            <option value="Plan to Read">Plan to Read</option>
+          </select>
+          <button type="submit">Add</button>
+          <button type="button" id="closeModal">Cancel</button>
+        </form>
+      </div>
+    </div>
+
     <script src="script.js"></script>
   </body>
 </html>
