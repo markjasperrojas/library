@@ -22,8 +22,23 @@ th {
 
 button {
   margin: 10px 0;
+  margin-left: 20px;
   padding: 8px 12px;
   cursor: pointer;
+}
+
+.special-button {
+  margin: 0px;
+}
+
+.reading {
+  background-color: red;
+  color: white;
+}
+
+.completed {
+  background-color: green;
+  color: white;
 }
 
 .modal {

@@ -2,6 +2,12 @@
 
 const myLibrary = [];
 
+addBookToLibrary("Naruto Shippuden", "Masashi Kishimoto", 10210, "Completed");
+addBookToLibrary("Demon Slayer", "Koyoharu Gotouge", 4496, "Reading");
+addBookToLibrary("Solo Leveling", "Chu gong", 336, "Completed");
+
+displayBooks(myLibrary);
+
 const modal = document.getElementById("bookModal");
 const openModalBtn = document.getElementById("openModal");
 const closeModalBtn = document.getElementById("closeModal");
@@ -18,7 +24,12 @@ closeModalBtn.addEventListener("click", () => {
 form.addEventListener("submit", (e) => {
   e.preventDefault();
 
-  addBookToLibrary(myLibrary);
+  const title = document.getElementById("title").value;
+  const author = document.getElementById("author").value;
+  const pages = document.getElementById("pages").value;
+  const status = document.getElementById("status").value;
+
+  addBookToLibrary(title, author, pages, status);
 
   displayBooks(myLibrary);
 
@@ -26,12 +37,13 @@ form.addEventListener("submit", (e) => {
   modal.style.display = "none";
 });
 
-function Book(id, title, author, pages, status) {
+// class
+function Book(title, author, pages, status) {
   if (!new.target) {
-    throw Error("Please don't forget the 'new'");
+    throw Error("You must use the 'new' operator to call the constructor");
   }
 
-  this.id = id;
+  this.id = crypto.randomUUID();
   this.title = title;
   this.author = author;
   this.pages = pages;
@@ -50,6 +62,11 @@ function Book(id, title, author, pages, status) {
   };
 }
 
+function addBookToLibrary(title, author, pages, status) {
+  const newBook = new Book(title, author, pages, status);
+  myLibrary.push(newBook);
+}
+
 function displayBooks(myLibrary) {
   const tableBody = document.querySelector("#bookTable tbody");
 
@@ -57,32 +74,50 @@ function displayBooks(myLibrary) {
 
   myLibrary.forEach((book) => {
     const row = document.createElement("tr");
-    const deleteBtn = document.createElement("button");
+    const statusCell = document.createElement("td");
 
+    const statusBtn = document.createElement("button");
+    statusBtn.textContent = book.status;
+    statusBtn.classList.add("special-button");
+
+    // check the status and add a proper name class
+    if (book.status === "Reading") {
+      statusBtn.classList.add("reading");
+    } else {
+      statusBtn.classList.add("completed");
+    }
+
+    const deleteBtn = document.createElement("button");
     deleteBtn.textContent = "Delete";
     deleteBtn.onclick = function () {
       deleteBook(book.id);
     };
 
     row.innerHTML = `
-        <td>${book.title}</td>
-        <td>${book.author}</td>
-        <td>${book.pages}</td>
-        <td>${book.status}</td>
-      `;
+      <td>${book.title}</td>
+      <td>${book.author}</td>
+      <td>${book.pages}</td>
+    `;
 
+    statusBtn.addEventListener("click", () => {
+      if (statusBtn.classList.contains("reading")) {
+        statusBtn.classList.remove("reading");
+        statusBtn.classList.add("completed");
+        statusBtn.textContent = "Completed";
+        book.status = "Completed";
+      } else {
+        statusBtn.classList.remove("completed");
+        statusBtn.classList.add("reading");
+        statusBtn.textContent = "Reading";
+        book.status = "Reading";
+      }
+    });
+
+    statusCell.appendChild(statusBtn);
+    row.appendChild(statusCell);
     row.appendChild(deleteBtn);
     tableBody.appendChild(row);
   });
-}
-
-function addBookToLibrary(myLibrary) {
-  const title = document.getElementById("title").value;
-  const author = document.getElementById("author").value;
-  const pages = document.getElementById("pages").value;
-  const status = document.getElementById("status").value;
-
-  myLibrary.push(new Book(crypto.randomUUID(), title, author, pages, status));
 }
 
 function deleteBook(id) {
