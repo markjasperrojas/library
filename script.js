@@ -1,5 +1,4 @@
 // const { randomUUID } = require("crypto"); // For Node.js
-// randomUUID() only not crypto.randomUUID() if running with Node.js
 
 const myLibrary = [];
 
@@ -58,12 +57,21 @@ function displayBooks(myLibrary) {
 
   myLibrary.forEach((book) => {
     const row = document.createElement("tr");
+    const deleteBtn = document.createElement("button");
+
+    deleteBtn.textContent = "Delete";
+    deleteBtn.onclick = function () {
+      deleteBook(book.id);
+    };
+
     row.innerHTML = `
         <td>${book.title}</td>
         <td>${book.author}</td>
         <td>${book.pages}</td>
         <td>${book.status}</td>
       `;
+
+    row.appendChild(deleteBtn);
     tableBody.appendChild(row);
   });
 }
@@ -75,4 +83,12 @@ function addBookToLibrary(myLibrary) {
   const status = document.getElementById("status").value;
 
   myLibrary.push(new Book(crypto.randomUUID(), title, author, pages, status));
+}
+
+function deleteBook(id) {
+  const index = myLibrary.findIndex((book) => book.id === id);
+  if (index !== -1) {
+    myLibrary.splice(index, 1);
+  }
+  displayBooks(myLibrary);
 }
